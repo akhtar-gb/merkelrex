@@ -14,33 +14,27 @@
 void MerkelMain::init()
 {
     loadOrderBook();
-    int userOptionInput;
+    int userInput;
     while(true)
     {
         printMenu();                              // app menu options in the CLI
-        userOptionInput = getUserOption();        // read and process user input
-        processUserOption(userOptionInput);
+        userInput = getUserOption();        // read and process user input
+        processUserOption(userInput);
     };
 };
 
 // ----------------------------- load order book
 void MerkelMain::loadOrderBook()
 {
-    orders.push_back( OrderBookEntry { "2020/03/17 17:01:24.884492",
-                                        "BTC/USDT",
-                                        OrderBookType::bid,
-                                        5348.8502489,
-                                        2.46021} );
-    
-    orders.push_back(OrderBookEntry { "2020/03/17 17:01:24.884492",
-                                        "BTC/USDT",
-                                        OrderBookType::bid,
-                                        4000.0001, 0.0001} );
+    orders = CSVReader::readCSV("/Users/akhtar/Documents/computer-science/uol-bsc-cs/level-5/cm-2005-object-oriented-programming/merkelrex/merkelrex-xcode/Merkelrex/Merkelrex/20200317.csv");
+    std::cout << "MerkelMain::loadOrder >> read orders: " << orders.size() << std::endl;
 };
 
 // ----------------------------- menu options functions
 void MerkelMain::printMenu()
 {
+    std::cout << "--------------------------------------------" << std::endl;
+    std::cout << "Welcome to Merkelrex Trading Simulation \n" << std::endl;
     std::cout << "1: Print help" << std::endl;
     std::cout << "2: Print exchange stats" << std::endl;
     std::cout << "3: Make an ask" << std::endl;

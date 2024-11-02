@@ -11,11 +11,11 @@
 #include <stdio.h>
 #include <vector>
 #include "OrderBookEntry.hpp"
+#include "CSVReader.hpp"
 
 class MerkelMain
 {
 //    <#instance variables#>
-    
     public:
         MerkelMain() = default; // default constructor
         
