@@ -31,7 +31,7 @@ public:
     
 private:
     static std::vector<std::string> tokenise(std::string csvLine, char separator);
-    static OrderBookEntry stringsToOBE(std::vector<std::string> tokenstrings);
+    static OrderBookEntry stringsToOBE(std::vector<std::string> tokenstrings, std::string line, int lineCount);
 };
 
 
