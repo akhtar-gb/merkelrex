@@ -9,10 +9,12 @@
 #define OrderBookEntry_hpp
 
 #include <stdio.h>
-#include <string>
+
 #pragma once
 
-enum class OrderBookType {bid, ask};
+#include <string>
+
+enum class OrderBookType {bid, ask, unknown};
 
 class OrderBookEntry
 {
@@ -25,6 +27,8 @@ class OrderBookEntry
         OrderBookType orderType;
         double price;
         double amount;
+    
+    static OrderBookType stringToOrderBookType(const std::string& s);
 };
 
 #endif /* OrderBookEntry_hpp */

@@ -7,12 +7,15 @@
 
 #include <iomanip>
 #include <iostream>
+#include <fstream>
 #include <map>
 #include <vector>
 #include <string>
+#include <unistd.h>
 
 #include "OrderBookEntry.hpp"
 #include "MerkelMain.hpp"
+#include "CSVReader.hpp"
 
 //// ------------------- useful functions -------------------------- //
 //double computeAveragePrice(std::vector<OrderBookEntry>& entries)
@@ -57,84 +60,154 @@
 
 
 
-// main function -------------------------------------------------- //
+//// main function -------------------------------------------------- //
+//
+//int main(int argc, const char * argv[]) {
+//    // insert code here...
+//    std::cout << std::fixed << std::setprecision(8);
+//    
+//    MerkelMain app{}; // instantating the app as an MerkelMain object
+//    app.init();
+////    return 0;
+//};
 
-int main(int argc, const char * argv[]) {
-    // insert code here...
-    std::cout << std::fixed << std::setprecision(8);
-    
-    
-//    // -------------- data structure - vector creating and testing -- //
-//    // defining vectors to store data for each attribute/column
-//    std::vector<double> prices;
-//    std::vector<double> amounts;
-//    std::vector<std::string> timestamps;
-//    std::vector<std::string> products;
-//    std::vector<OrderBookType> orderTypes;
-//    
-//    // push_back value for each data type in the vectors for each type
-//    prices.push_back(5348.8502489);
-//    amounts.push_back(2.46021);
-//    timestamps.push_back("2020/03/17 17:01:24.884492");
-//    products.push_back("BTC/USDT");
-//    orderTypes.push_back(OrderBookType::bid);
-//    
-//    prices.push_back(4000.0001);
-//    amounts.push_back(0.0001);
-//    timestamps.push_back("2020/03/17 17:01:24.884492");
-//    products.push_back("BTC/USDT");
-//    orderTypes.push_back(OrderBookType::bid);
-//    
-    // accessing the values in each vector
-//    std::cout << "First row price: " << prices[0] << std::endl;
-//    std::cout << "First row amounts: " << amounts[0] << std::endl;
-//    std::cout << "First row timestamp: " << timestamps[0] << std::endl;
-//    std::cout << "First row prodcuts: " << products[0] << std::endl;
-//    std::cout << "First row price: " << (orderTypes[0] == OrderBookType::bid ? "bid" : "ask") << std::endl;
-    
-    // -------------- order book entry class object creation testing --- //
-//    OrderBookEntry obe1 {0.125, 2.46021, "2020/03/17 17:01:24.884492", "BTC/USDT", OrderBookType::bid};
-//    OrderBookEntry obe2 {0.5, 2.46021, "2020/03/17 17:01:24.884492", "BTC/USDT", OrderBookType::bid};
-//    OrderBookEntry obe1 {"2020/06/01 11:57:30.328127", "ETH/BTC", OrderBookType::bid, 0.02482205, 23.9999428};
-//    OrderBookEntry obe2 {"2020/06/01 11:57:30.328127", "ETH/BTC", OrderBookType::bid, 0.02481485, 65.};
-//    OrderBookEntry obe3 {"2020/06/01 11:57:30.328127", "ETH/BTC", OrderBookType::bid, 0.02480983, 0.39562087};
-//    OrderBookEntry obe4 {"2020/06/01 11:57:30.328127", "ETH/BTC", OrderBookType::bid, 0.02480883, 8.05447423};
-//    OrderBookEntry obe5 {"2020/06/01 11:57:30.328127", "ETH/BTC", OrderBookType::bid, 0.02480882, 3.};
-//    OrderBookEntry obe6 {"2020/06/01 11:57:30.328127", "ETH/BTC", OrderBookType::bid, 0.02480866, 3.702};
-//    OrderBookEntry obe7 {"2020/06/01 11:57:30.328127", "ETH/BTC", OrderBookType::bid, 0.02480841, 31.13304484};
-    
-//    entries.push_back(obe1);
-//    entries.push_back(obe2);
-//    entries.push_back(obe3);
-//    entries.push_back(obe4);
-//    entries.push_back(obe5);
-//    entries.push_back(obe6);
-//    entries.push_back(obe7);
-//    
-//    for (OrderBookEntry& e : entries)
+/** function prototype */
+std::vector<std::string> tokensie(std::string csvLine, char separator);
+
+/** function implementation */
+std::vector<std::string> tokensie(std::string csvLine, char separator)
+{
+    /** pseudocode implementation below*/
+//    char separater = separator;
+//    // string vector tokens ## stores the tokens
+//    std::vector<std::string> tokens;
+//    //    int start, end ## used to delineate the position of the tokens
+//    signed int start, end;
+//    //    start = csvLine.find_first_not_of(separator)
+//    start = csvLine.find_first_not_of(separator, 0);
+//    //    do
+//    do
 //    {
-//        std::cout << e.price << std::endl;
-//    };
-//    
-//    std::cout << "entries vector size: " << entries.size() << std::endl;
-//    
-//    double averagePrice = computeAveragePrice(entries);
-//    std::cout << "Average price: " << averagePrice << std::endl;
-//    
-//    double lowestPrice = computeLowPrice(entries);
-//    std::cout << "Low price: " << lowestPrice << std::endl;
-//    
-//    double highestPrice = computeHighPrice(entries);
-//    std::cout << "High price: " << highestPrice << std::endl;
-//    
-//    double spread = computeSpread(entries);
-//    std::cout << "Spread: " << spread << std::endl;
+//        //    end = next 'separator' after start
+//        end = csvLine.find_first_of(separator, start);
+//        //    if start == csvLine.length or start == end ## nothing more to find
+//        //    break
+//        if (start == csvLine.length() || start == end) break;
+//        //    if end >= 0 ## we found the separator
+//        //    token = csvLine.substr(start, end - start) ## start, substring length
+//        std::string token;
+//        if (end >= 0) token = csvLine.substr(start, end - start);
+//        //    else
+//        //    token = csvLine.substr(start, csvLine.length - start) ## end is invalid
+//        else token = csvLine.substr(start, csvLine.length() - start);
+//        //    add token to the end of the tokens vector
+//        //    Trim leading and trailing whitespace from the token
+//        token.erase(0, token.find_first_not_of(" \t"));
+//        token.erase(token.find_last_not_of(" \t") + 1);
+//        tokens.push_back(token);
+//        //    start = end + 1 ## move past this token
+//        start = end + 1;
+//    }
+//    //    while (end > 0) ## continue loop condition
+//    while (end > 0);
+////    while (end != std::string::npos);
+//    //
+//    return tokens;
     
-    // ----------------------- commented out for testing the cout of the values pushed back into the vector
+    std::vector<std::string> tokens;
+    size_t start = csvLine.find_first_not_of(separator); // Start at first non-separator character
+    size_t end;
     
-    MerkelMain app{}; // instantating the app as an MerkelMain object
-    app.init();
-//    return 0;
+    while (start != std::string::npos){
+        end = csvLine.find_first_of(separator, start); // Find the next separator after 'start'
+        
+        std::string token = csvLine.substr(start, end - start);
+        //    Trim leading and trailing whitespace from the token
+        token.erase(0, token.find_first_not_of(" \t"));
+        token.erase(token.find_last_not_of(" \t") + 1);
+        tokens.push_back(token); // add the token
+        
+        if (end != std::string::npos) start = end + 1; // Move start to the next token
+        else break; // exit the loop after the last token
+    };
+    
+    return tokens;
 };
 
+int main()
+{
+    
+//// ------------------------- tokenise algorithm testing ------------------ //
+//////   string variable that stores the input string
+//////    std::string s = "hello, I, have three tokens";
+//////    std::string s {"thing0,thing1,thing2"}; // the string we are processing
+////
+////    /** test strings */
+//////    std::string s {"x, y, 90, (), R, test2"};
+////    std::string s {"2020/03/17 17:01:24.884492,ETH/BTC,bid,0.02187308,7.44564869"};
+////    
+////    // char separator = ',' ## the character that separates the tokens
+////    std::vector<std::string> tokens = tokensie(s, ',');
+////    
+////    // note the use of const and & below
+////    // const says I won't edit t
+////    for (const std::string& t : tokens)
+////    {
+////        std::cout << t << std::endl;
+////    };
+//    
+//// ---------------------- test code for the cwd --------------------------- //
+////    char cwd[1024];
+////    if (getcwd(cwd, sizeof(cwd)) != nullptr) {
+////        std::cout << "Current working dir: " << cwd << std::endl;
+////    } else {
+////        perror("getcwd() error");
+////    }
+//    
+//    std::string csvFilename {"/Users/akhtar/Documents/computer-science/uol-bsc-cs/level-5/cm-2005-object-oriented-programming/merkelrex/merkelrex-xcode/Merkelrex/Merkelrex/20200317.csv"};
+//    std::ifstream csvFile {csvFilename};
+//    if (csvFile.is_open()) {
+//        std::cout << "File opened: " << csvFilename << std::endl;
+//        std::string line;
+//        
+//        // ------------------ read line and call tokenise ------------------------------------//
+//        signed int lineCount {0};
+//        while(std::getline(csvFile, line)){
+//            lineCount++;
+//            std::vector<std::string> tokens = tokensie(line, ',');
+//            
+//            if (tokens.size() != 5){
+//                std::cout << "Read line " << lineCount << ": " << line << std::endl;
+//                std::cout << "Unexpected token count " << tokens.size() << ": " << "skipping line " << lineCount << std::endl;
+//                continue;
+//            } else{
+////                std::cout << "Read line " << lineCount << ": " << line << std::endl;
+//            };
+//            
+//            // converting tokens into correct data types
+//            try {
+//                std::string timestamp = tokens[0];
+//                std::string productPair = tokens[1];
+//                OrderBookType orderType = OrderBookEntry::stringToOrderBookType(tokens[2]);
+//                double price = std::stod(tokens[3]);
+//                double amount = std::stod(tokens[4]);
+//            } catch (const std::exception& e) {
+//                std::cout << "Conversion failed: skipping line " << lineCount << std::endl;
+//                continue;
+//            }
+//        };
+//        
+//        std::cout << "Lines read: " << lineCount << std::endl;
+//    } else {
+//        std::cout << "Problem opening file: " << csvFilename << std::endl;
+//    };
+//    
+//    csvFile.close();
+    
+    // ------------------- testin CSVReader class object instance -------------------------//
+    
+    std::vector<OrderBookEntry> orderBook = CSVReader::readCSV("some test");
+    
+    return 0;
+};
 
