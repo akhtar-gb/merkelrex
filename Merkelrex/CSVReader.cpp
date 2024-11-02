@@ -108,7 +108,7 @@ OrderBookEntry CSVReader::stringsToOBE(std::vector<std::string> tokens, std::str
     double price, amount;
 
     if (tokens.size() != 5){
-        std::cout << "Read line " << lineCount << ": " << line << " >> Unexpected token count " << tokens.size() << ": " << "skipping line " << lineCount << std::endl;
+        std::cout << "Read line " << lineCount << ": " << line << " >> Unexpected token count " << tokens.size() << ": " << "skipping line " << std::endl;
         throw std::exception{};
     } else{
 //        std::cout << "Read line " << lineCount << ": " << std::endl;
@@ -120,10 +120,16 @@ OrderBookEntry CSVReader::stringsToOBE(std::vector<std::string> tokens, std::str
         amount = std::stod(tokens[4]);
     } catch (const std::exception& e) {
 //        std::cout << "Conversion failed: skipping line " << lineCount << std::endl;
-        std::cout << "Conversion error: price float " << tokens[3] << std::endl;
-        std::cout << "Conversion error: amount float " << tokens[4] << std::endl;
+//        std::cout << "Read line " << lineCount << ": " << line << " >> Conversion error " << tokens.size() << ": " << "skipping line " << lineCount << std::endl;
+//        std::cout << "Conversion error: price float " << tokens[3] << std::endl;
+//        std::cout << "Conversion error: amount float " << tokens[4] << std::endl;
+        
+        std::cout << "Read line " << lineCount << ": " << line << std::endl;
+        std::cout << "Conversion error >> " << e.what()
+                  << " token at index " << (tokens[3].empty() ? "3" : "4")
+                  << ", skipping line " << std::endl;
         throw;
-    }
+    };
     
     OrderBookEntry obe{tokens[0], tokens[1], OrderBookEntry::stringToOrderBookType(tokens[2]),price, amount};
     return obe;

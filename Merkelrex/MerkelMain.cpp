@@ -27,7 +27,7 @@ void MerkelMain::init()
 void MerkelMain::loadOrderBook()
 {
     orders = CSVReader::readCSV("/Users/akhtar/Documents/computer-science/uol-bsc-cs/level-5/cm-2005-object-oriented-programming/merkelrex/merkelrex-xcode/Merkelrex/Merkelrex/20200317.csv");
-    std::cout << "MerkelMain::loadOrder >> read orders: " << orders.size() << std::endl;
+    std::cout << "MerkelMain::loadOrderBook() >> read orders: " << orders.size() << std::endl;
 };
 
 // ----------------------------- menu options functions
