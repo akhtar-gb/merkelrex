@@ -12,6 +12,7 @@
 #include <vector>
 #include "OrderBookEntry.hpp"
 #include "CSVReader.hpp"
+#include "OrderBook.hpp"
 
 class MerkelMain
 {
@@ -36,7 +37,9 @@ class MerkelMain
         void processInvalidUserIput();
         void processUserOption(int userOption);
     
-        std::vector<OrderBookEntry> orders;         // vector data structure to hold orders
+//        std::vector<OrderBookEntry> orders;         // vector data structure to hold orders
+        // new way to represent orders
+        OrderBook orderBook{"/Users/akhtar/Documents/computer-science/uol-bsc-cs/level-5/cm-2005-object-oriented-programming/merkelrex/merkelrex-xcode/Merkelrex/Merkelrex/20200317.csv"};
 };
 
 #endif /* MerkelMain_hpp */

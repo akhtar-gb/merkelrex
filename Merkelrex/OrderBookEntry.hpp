@@ -21,14 +21,14 @@ class OrderBookEntry
     public:
         /** Craete a new OrderBookEntry with the price set to the sent in value
          */
-    OrderBookEntry(std::string _timestamp, std::string _product, OrderBookType _orderType, double _price, double _amount);
+        OrderBookEntry(std::string _timestamp, std::string _productPair, OrderBookType _orderType, double _price, double _amount);
         std::string timestamp;
-        std::string product;
+        std::string productPair;
         OrderBookType orderType;
         double price;
         double amount;
-    
-    static OrderBookType stringToOrderBookType(const std::string& s);
+        
+        static OrderBookType stringToOrderBookType(const std::string& s);
 };
 
 #endif /* OrderBookEntry_hpp */

@@ -84,6 +84,12 @@ std::vector<std::string> CSVReader::tokenise(std::string csvLine, char separator
     
     std::vector<std::string> tokens;
     
+    /**
+        * The stdlib.h and stddef.h header files define a datatype called size_t
+        * Used to represent the size of an object.
+        * Library functions that take sizes expect them to be of type size_t, and the sizeof operator evaluates to size_t
+        * Size depdendent of system word size - 32bit/64bit
+     */
     size_t start = csvLine.find_first_not_of(separator); // Start at first non-separator character
     size_t end;
     
@@ -108,10 +114,11 @@ OrderBookEntry CSVReader::stringsToOBE(std::vector<std::string> tokens, std::str
     double price, amount;
 
     if (tokens.size() != 5){
-        std::cout << "Read line " << lineCount << ": " << line << " >> Unexpected token count " << tokens.size() << ": " << "skipping line " << std::endl;
+        std::cout << "Read line " << lineCount << ": " << line << std::endl;
+        std::cout << "Unexpected token count >> " << tokens.size() << ": " << "skipping line " << std::endl;
         throw std::exception{};
     } else{
-//        std::cout << "Read line " << lineCount << ": " << std::endl;
+//        std::cout << "Read line " << lineCount << ": " << std::endl; // will print every line read
     };
     
     // converting tokens into correct data types
