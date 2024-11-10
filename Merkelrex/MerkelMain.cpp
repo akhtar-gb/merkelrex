@@ -18,6 +18,12 @@ void MerkelMain::init()
     std::cout << "Welcome to Merkelrex Trading Simulation" << std::endl;
     
     loadOrderBook();
+    
+    // get the first time stamp from the orderBook when the app loads
+    // orderBook is an instance of the OrderBook class
+    currentTime = orderBook.getEarliestTime();
+    
+    // initialise app with user menu in the console
     int userInput;
     while(true)
     {
@@ -43,7 +49,7 @@ void MerkelMain::printMenu()
     std::cout << "3: Make an ask" << std::endl;
     std::cout << "4: Make a bid" << std::endl;
     std::cout << "5: Print wallet" << std::endl;
-    std::cout << "6: Continue" << std::endl;
+    std::cout << "6: Continue to the next timestamp" << std::endl;
     std::cout << "7: Exit" << std::endl;
     std::cout << "-------------------------------------------------------------------------------------------------------------------" << std::endl;
 };
@@ -82,8 +88,8 @@ void MerkelMain::printMarketStats()
     std::cout << "and compare to other exchanges \n" << std::endl;
     
     // print timeStamp
-    std::string timeStamp{"2020/03/17 17:01:24.884492"};
-    std::cout << "Timestamp: " << timeStamp << std::endl;
+//    std::string currentTime{"2020/03/17 17:01:24.884492"};
+    std::cout << "Timestamp: " << currentTime << std::endl;
     
     // table setup
     const int productPairWidth {12};
@@ -100,7 +106,7 @@ void MerkelMain::printMarketStats()
               << std::setw(ordertypeWidth) << "Bids Seen"
               << std::setw(maxPriceWidth) << "Max Price"
               << std::setw(minPriceWidth) << "Min Price" << " | "
-              << std::setw(spreadWidth) << "Spread"
+              << std::setw(spreadWidth) << "Spread *"
               << std::endl;
     
     // seperator line
@@ -117,8 +123,8 @@ void MerkelMain::printMarketStats()
 //         std::cout << "Min price: " << OrderBook::getLowPrice(entries) << "\n" << std::endl;
          
         /** prinitng the stats table */
-        std::vector<OrderBookEntry> askEntries = orderBook.getOrders(timeStamp, p, OrderBookType::ask);
-        std::vector<OrderBookEntry> bidEntries = orderBook.getOrders(timeStamp, p, OrderBookType::bid);
+        std::vector<OrderBookEntry> askEntries = orderBook.getOrders(currentTime, p, OrderBookType::ask);
+        std::vector<OrderBookEntry> bidEntries = orderBook.getOrders(currentTime, p, OrderBookType::bid);
         
     // calculate ask statistics
         int asksSeen = askEntries.size();
@@ -142,7 +148,7 @@ void MerkelMain::printMarketStats()
                   << std::endl;
     };
     
-//    std::cout << "\n" << std::endl;
+    std::cout << "* Spread = min ask price - max bid price" << std::endl;
 };
 
 void MerkelMain::enterAsk()
@@ -168,8 +174,13 @@ void MerkelMain::printWallet()
 
 void MerkelMain::gotoNextTimeframe()
 {
-    std::cout << "Go to the next time frame" << std::endl;
-    std::cout << "and select the next option \n" << std::endl;
+    std::string previousTimestamp = currentTime;
+    std::cout << "Previous timestamp was: " << previousTimestamp << std::endl;
+    currentTime = orderBook.getNextTime(currentTime);
+    std::cout << "You are in timestamp: " << currentTime << std::endl;
+    
+    std::cout << "Select the next option for the current timestamp" << std::endl;
+    std::cout << "Or go to the next time frame with option 6 \n" << std::endl;
 };
 
 void MerkelMain::exitApp()

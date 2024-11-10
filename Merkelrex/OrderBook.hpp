@@ -28,6 +28,10 @@ class OrderBook
         std::vector<std::string> getKnownProducts();
         /** return vector of Orders according to the sent filters */
         std::vector<OrderBookEntry> getOrders(std::string timestamp, std::string product, OrderBookType type);
+        /** return earlist time frame*/
+        std::string getEarliestTime();
+        /** return next time frame*/
+        std::string getNextTime(const std::string& timestamp);
         /** return the price of the highest bid in the sent set */
         static double getHighPrice(std::vector<OrderBookEntry>& orders);
         /** return the price of the lowest bid in the sent set */

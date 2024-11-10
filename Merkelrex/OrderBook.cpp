@@ -7,7 +7,7 @@
 
 #include "OrderBook.hpp"
 
-
+/** constructor for the OrderBook object instantiated in MerkelMain.hpp as orders -- see line 42 */
 OrderBook::OrderBook(std::string filename)
 {
     OrderBook::orders = CSVReader::readCSV(filename);
@@ -35,7 +35,7 @@ std::vector<std::string> OrderBook::getKnownProducts()
 };
 */
 
-///* Challenge version */
+/* Challenge version */
 std::vector<std::string> OrderBook::getKnownProducts()
 {
     std::unordered_set<std::string> uniqueProductPairs;
@@ -52,7 +52,7 @@ std::vector<std::string> OrderBook::getKnownProducts()
     return productPairs;
 };
 
-
+/** order quesry function ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 std::vector<OrderBookEntry> OrderBook::getOrders(std::string timestamp, std::string productPair, OrderBookType type)
 {
     std::vector<OrderBookEntry> queriedOrders;
@@ -66,6 +66,30 @@ std::vector<OrderBookEntry> OrderBook::getOrders(std::string timestamp, std::str
     return queriedOrders;
 };
 
+/** time frame functions ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- */
+std::string OrderBook::getEarliestTime()
+{
+    return orders[0].timestamp;
+};
+
+std::string OrderBook::getNextTime(const std::string& timestamp)
+{
+    std::string next_timestamp {""};
+    
+    for (OrderBookEntry& e : orders){
+        if (e.timestamp > timestamp)
+        {
+            next_timestamp = e.timestamp;
+            break;
+        } else if (next_timestamp == ""){
+            // reset timestamp to the earlies time if no next_timestamp
+            next_timestamp = getEarliestTime();
+        }
+    };
+    return next_timestamp;
+};
+
+/** statistical functions ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 double OrderBook::getHighPrice(std::vector<OrderBookEntry>& orders)
 {
     double max {orders[0].price};
@@ -103,12 +127,3 @@ double OrderBook::computeSpread(double minAsk, double maxBid)
 //    return sum / entries.size();
 //};
 
-//double computeSpread(std::vector<OrderBookEntry>& entries)
-//{
-//    double spread = 0;
-//    for (OrderBookEntry& e : entries)
-//    {
-//        spread = computeLowPrice(entries) - computeHighPrice(entries);
-//    };
-//    return spread;
-//};

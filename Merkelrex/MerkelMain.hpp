@@ -25,6 +25,7 @@ class MerkelMain
         
     private:
         void loadOrderBook();                       // function to load data from order book vector
+    
         void printMenu();
         int getUserOption();
         void printHelp();
@@ -32,10 +33,13 @@ class MerkelMain
         void enterAsk();
         void enterBid();
         void printWallet();
-        void gotoNextTimeframe();
         void exitApp();
         void processInvalidUserIput();
         void processUserOption(int userOption);
+    
+        void gotoNextTimeframe();
+    
+        std::string currentTime;
     
 //        std::vector<OrderBookEntry> orders;         // vector data structure to hold orders
         // new way to represent orders
